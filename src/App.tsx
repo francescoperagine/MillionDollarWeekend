@@ -1,11 +1,20 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import DynamicFieldGroup from './components/DynamicFieldGroup';
+import Button from './components/Button';
+import NavButton from './components/NavButton';
+import ScrollToTop from './components/ScrollToTop';
 
-const STORAGE_KEY = 'mdw_chapter3_challenges';
+const STORAGE_KEY = 'mdw_workbook_challenges';
 
 interface Field {
   id: string;
   label: string;
   type: 'text' | 'textarea';
+  dynamic?: boolean; // Whether this field supports multiple answers
+  minFields?: number; // Minimum number of fields (for dynamic fields)
+  maxFields?: number; // Maximum number of fields (for dynamic fields)
+  required?: boolean; // Whether the field is required
 }
 
 interface Challenge {
@@ -17,7 +26,7 @@ interface Challenge {
 }
 
 interface ChallengeData {
-  [fieldId: string]: string;
+  [fieldId: string]: string | string[]; // Support both single values and arrays
 }
 
 interface FormData {
@@ -34,85 +43,147 @@ interface StoredData {
   currentData: FormData;
 }
 
-const challenges: Challenge[] = [
+const getChallenges = (t: (key: string) => string): Challenge[] => [
+  {
+    id: 'dollar_challenge',
+    title: t('challenges.dollar_challenge.title'),
+    description: t('challenges.dollar_challenge.description'),
+    instruction: t('challenges.dollar_challenge.instruction'),
+    fields: [
+      { id: 'who_asked', label: t('challenges.dollar_challenge.fields.who_asked'), type: 'text', required: true },
+      { id: 'response', label: t('challenges.dollar_challenge.fields.response'), type: 'textarea', required: true }
+    ]
+  },
+  {
+    id: 'now_not_how',
+    title: t('challenges.now_not_how.title'),
+    description: t('challenges.now_not_how.description'),
+    instruction: t('challenges.now_not_how.instruction'),
+    fields: [
+      { id: 'person_asked', label: t('challenges.now_not_how.fields.person_asked'), type: 'text', required: true },
+      { id: 'ideas_suggested', label: t('challenges.now_not_how.fields.ideas_suggested'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 5, required: true }
+    ]
+  },
+  {
+    id: 'freedom_number',
+    title: t('challenges.freedom_number.title'),
+    description: t('challenges.freedom_number.description'),
+    instruction: t('challenges.freedom_number.instruction'),
+    fields: [
+      { id: 'monthly_number', label: t('challenges.freedom_number.fields.monthly_number'), type: 'text', required: true },
+      { id: 'breakdown', label: t('challenges.freedom_number.fields.breakdown'), type: 'textarea', required: false }
+    ]
+  },
+  {
+    id: 'coffee_challenge',
+    title: t('challenges.coffee_challenge.title'),
+    description: t('challenges.coffee_challenge.description'),
+    instruction: t('challenges.coffee_challenge.instruction'),
+    fields: [
+      { id: 'where', label: t('challenges.coffee_challenge.fields.where'), type: 'text', required: true },
+      { id: 'result', label: t('challenges.coffee_challenge.fields.result'), type: 'textarea', required: true }
+    ]
+  },
   {
     id: 'target_groups',
-    title: 'Challenge 1: Top Three Groups',
-    description: "Before you even think about picking a business idea, make sure you have easy access to the people you want to help. Think about where you have easy access to a targeted group of people whom you really want to help—like new moms in Austin, cyclists, freelance writers, or taco obsessives.",
-    instruction: "Who do you have easy access to that you'd be EXCITED to help? This can be your neighbors, colleagues, religious friends, golf buddies, cooking friends, etc.",
+    title: t('challenges.target_groups.title'),
+    description: t('challenges.target_groups.description'),
+    instruction: t('challenges.target_groups.instruction'),
     fields: [
-      { id: 'group1', label: 'Group 1', type: 'text' },
-      { id: 'group2', label: 'Group 2', type: 'text' },
-      { id: 'group3', label: 'Group 3', type: 'text' }
+      { id: 'groups', label: t('challenges.target_groups.fields.groups'), type: 'text', dynamic: true, minFields: 1, maxFields: 10, required: true }
     ]
   },
   {
     id: 'solve_problems',
-    title: 'Challenge 2: Solve Your Own Problems',
-    description: "The best entrepreneurs are the most dissatisfied. Your frustrations—and the frustrations of others—are your business opportunities. Great ideas come from being a problem seeker.",
-    instruction: "Use these four questions to find three ideas:\n\n1. What is one thing this morning that irritated me?\n2. What is one thing on my to-do list that's been there over a week?\n3. What is one thing that I regularly fail to do well?\n4. What is one thing I wanted to buy recently only to find out that no one made it?",
+    title: t('challenges.solve_problems.title'),
+    description: t('challenges.solve_problems.description'),
+    instruction: t('challenges.solve_problems.instruction'),
     fields: [
-      { id: 'idea1', label: 'Business Idea 1', type: 'textarea' },
-      { id: 'idea2', label: 'Business Idea 2', type: 'textarea' },
-      { id: 'idea3', label: 'Business Idea 3', type: 'textarea' }
+      { id: 'ideas', label: t('challenges.solve_problems.fields.ideas'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 10, required: true }
     ]
   },
   {
     id: 'bestsellers',
-    title: 'Challenge 3: Bestsellers Are Your Best Friends',
-    description: "What products are already selling a crap-ton? iPads, iPhones, etc. Basically, any product you'd find on Amazon's Bestseller list would work here. It's easier to sell to a large group of people who've already spent money on a product or service.",
-    instruction: "How can you accessorize a popular product (for example, stickers for an iPhone) or sell a service to those people (teaching someone how to use an iPhone)?\n\nExamples: Customizing Nike shoes, Video game tutorial for an Xbox game, Teaching computer novices how to use a MacBook.\n\nWrite down two accessorizing ideas:",
+    title: t('challenges.bestsellers.title'),
+    description: t('challenges.bestsellers.description'),
+    instruction: t('challenges.bestsellers.instruction'),
     fields: [
-      { id: 'accessory1', label: 'Accessorizing Idea 1', type: 'textarea' },
-      { id: 'accessory2', label: 'Accessorizing Idea 2', type: 'textarea' }
+      { id: 'accessories', label: t('challenges.bestsellers.fields.accessories'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 10, required: true }
     ]
   },
   {
     id: 'marketplaces',
-    title: 'Challenge 4: Marketplaces',
-    description: "One of Noah's favorite ways to find ideas is by studying the marketplaces where people are TRYING to spend money. Your potential customers are everywhere already asking in public for solutions—on message boards, in Facebook posts, in tweets, in church groups.",
-    instruction: "Visit a marketplace like Etsy, Facebook Marketplace, Craigslist, or eBay. Look for frequent requests from people actively searching for someone to give their money to. Check completed listings on eBay to see how well certain products are selling.\n\nWrite at least one idea for a product or service:",
+    title: t('challenges.marketplaces.title'),
+    description: t('challenges.marketplaces.description'),
+    instruction: t('challenges.marketplaces.instruction'),
     fields: [
-      { id: 'marketplace_idea', label: 'Marketplace Idea', type: 'textarea' }
+      { id: 'marketplace_ideas', label: t('challenges.marketplaces.fields.marketplace_ideas'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 10, required: true }
     ]
   },
   {
     id: 'search_queries',
-    title: 'Challenge 5: Search Engine Queries',
-    description: "It's much easier to sell something when people ALREADY want it. There are 3 billion Google searches every day, giving you a direct line to customers' thoughts and needs. Work backwards from a problem people want solved (a query) toward a solution they may be willing to pay for.",
-    instruction: "Try searching for questions like:\n• \"How do I train my cat to use a toilet?\"\n• \"Best places to travel with a family?\"\n• \"Where can I rent a bike in Barcelona?\"\n\nUse tools like AnswerThePublic.com or go to Reddit's r/SomebodyMakeThis subreddit where people are ACTIVELY offering up ideas.\n\nAsk yourself: Is the potential solution a vitamin (nice-to-have) or a painkiller (must-have)?\n\nWrite two ideas:",
+    title: t('challenges.search_queries.title'),
+    description: t('challenges.search_queries.description'),
+    instruction: t('challenges.search_queries.instruction'),
     fields: [
-      { id: 'search_idea1', label: 'Search/Reddit Idea 1', type: 'textarea' },
-      { id: 'search_idea2', label: 'Search/Reddit Idea 2', type: 'textarea' }
+      { id: 'search_ideas', label: t('challenges.search_queries.fields.search_ideas'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 10, required: true }
     ]
   },
   {
     id: 'ten_ideas',
-    title: 'Final: Your Ten Ideas',
-    description: "You should now have a list of ten ideas (or more!) from the four challenges above. Write them all down here. There's never a \"perfect\" idea—your idea will evolve over time, just as all businesses do.",
-    instruction: "Write your ten ideas. Then eliminate the ones you're not excited about. If the top three are screaming \"Me! Me! Me!\" your work is done. If you can't decide, choose the ones you believe will be easiest to implement—and that you (and ideally other customers) would be thrilled to spend money on.",
+    title: t('challenges.ten_ideas.title'),
+    description: t('challenges.ten_ideas.description'),
+    instruction: t('challenges.ten_ideas.instruction'),
     fields: [
-      { id: 'idea_1', label: '1.', type: 'text' },
-      { id: 'idea_2', label: '2.', type: 'text' },
-      { id: 'idea_3', label: '3.', type: 'text' },
-      { id: 'idea_4', label: '4.', type: 'text' },
-      { id: 'idea_5', label: '5.', type: 'text' },
-      { id: 'idea_6', label: '6.', type: 'text' },
-      { id: 'idea_7', label: '7.', type: 'text' },
-      { id: 'idea_8', label: '8.', type: 'text' },
-      { id: 'idea_9', label: '9.', type: 'text' },
-      { id: 'idea_10', label: '10.', type: 'text' }
+      { id: 'all_ideas', label: t('challenges.ten_ideas.fields.all_ideas'), type: 'text', dynamic: true, minFields: 1, maxFields: 20, required: true }
     ]
   },
   {
     id: 'top_three',
-    title: 'Pick Your Top 3 Ideas',
-    description: "Now pick the three best ideas from your list above. These are the ideas you'll evaluate in Chapter 4 with the One-Minute Business Model.",
-    instruction: "Choose the ideas that:\n• You're most excited about\n• Will be easiest to implement\n• You (and customers) would pay for",
+    title: t('challenges.top_three.title'),
+    description: t('challenges.top_three.description'),
+    instruction: t('challenges.top_three.instruction'),
     fields: [
-      { id: 'top1', label: 'Top Idea #1', type: 'text' },
-      { id: 'top2', label: 'Top Idea #2', type: 'text' },
-      { id: 'top3', label: 'Top Idea #3', type: 'text' }
+      { id: 'top_ideas', label: t('challenges.top_three.fields.top_ideas'), type: 'text', dynamic: true, minFields: 1, maxFields: 5, required: true }
+    ]
+  },
+  {
+    id: 'market_research',
+    title: t('challenges.market_research.title'),
+    description: t('challenges.market_research.description'),
+    instruction: t('challenges.market_research.instruction'),
+    fields: [
+      { id: 'business_idea', label: t('challenges.market_research.fields.business_idea'), type: 'text', required: true },
+      { id: 'market_trend', label: t('challenges.market_research.fields.market_trend'), type: 'textarea', required: true },
+      { id: 'market_size', label: t('challenges.market_research.fields.market_size'), type: 'text', required: true },
+      { id: 'price_point', label: t('challenges.market_research.fields.price_point'), type: 'text', required: true },
+      { id: 'total_value', label: t('challenges.market_research.fields.total_value'), type: 'text', required: true },
+      { id: 'million_dollar', label: t('challenges.market_research.fields.million_dollar'), type: 'text', required: true }
+    ]
+  },
+  {
+    id: 'business_model',
+    title: t('challenges.business_model.title'),
+    description: t('challenges.business_model.description'),
+    instruction: t('challenges.business_model.instruction'),
+    fields: [
+      { id: 'product_price', label: t('challenges.business_model.fields.product_price'), type: 'text', required: true },
+      { id: 'cost_per_unit', label: t('challenges.business_model.fields.cost_per_unit'), type: 'text', required: true },
+      { id: 'profit_per_unit', label: t('challenges.business_model.fields.profit_per_unit'), type: 'text', required: true },
+      { id: 'target_profit', label: t('challenges.business_model.fields.target_profit'), type: 'text', required: true },
+      { id: 'units_needed', label: t('challenges.business_model.fields.units_needed'), type: 'text', required: true },
+      { id: 'is_doable', label: t('challenges.business_model.fields.is_doable'), type: 'textarea', required: true }
+    ]
+  },
+  {
+    id: 'pivot_plan',
+    title: t('challenges.pivot_plan.title'),
+    description: t('challenges.pivot_plan.description'),
+    instruction: t('challenges.pivot_plan.instruction'),
+    fields: [
+      { id: 'needs_pivot', label: t('challenges.pivot_plan.fields.needs_pivot'), type: 'text', required: false },
+      { id: 'pivot_ideas', label: t('challenges.pivot_plan.fields.pivot_ideas'), type: 'textarea', dynamic: true, minFields: 1, maxFields: 5, required: false },
+      { id: 'revised_model', label: t('challenges.pivot_plan.fields.revised_model'), type: 'textarea', required: false }
     ]
   }
 ];
@@ -125,20 +196,33 @@ interface ChallengesPageProps {
 }
 
 function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
-  const handleChange = (challengeId: string, fieldId: string, value: string) => {
+  const { t } = useTranslation();
+  const challenges = getChallenges(t);
+
+  const handleChange = (challengeId: string, fieldId: string, value: string | string[]) => {
     setData(prev => ({
       ...prev,
       [challengeId]: { ...prev[challengeId], [fieldId]: value }
     }));
   };
 
+  const getFieldValue = (challengeId: string, fieldId: string, isDynamic: boolean): string[] => {
+    const value = data[challengeId]?.[fieldId];
+    if (isDynamic) {
+      if (Array.isArray(value)) return value;
+      if (value) return [value as string];
+      return [''];
+    }
+    return [];
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+      <div className="max-w-3xl w-full">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Million Dollar Weekend</h1>
-          <h2 className="text-xl text-amber-600 font-semibold">Chapter 3: Finding Million-Dollar Ideas</h2>
-          <p className="text-gray-600 mt-2">Simple Exercises to Generate Profitable Business Ideas</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('header.title')}</h1>
+          <h2 className="text-xl text-amber-600 font-semibold">{t('header.subtitle')}</h2>
+          <p className="text-gray-600 mt-2">{t('header.description')}</p>
         </div>
 
         {challenges.map((challenge) => (
@@ -151,23 +235,40 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
             <div className="space-y-3">
               {challenge.fields.map(field => (
                 <div key={field.id}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
-                  {field.type === 'textarea' ? (
-                    <textarea
-                      className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
-                      rows={3}
-                      value={data[challenge.id]?.[field.id] || ''}
-                      onChange={e => handleChange(challenge.id, field.id, e.target.value)}
-                      placeholder="Write your answer here..."
+                  {field.dynamic ? (
+                    <DynamicFieldGroup
+                      label={field.label}
+                      values={getFieldValue(challenge.id, field.id, true)}
+                      onChange={(values) => handleChange(challenge.id, field.id, values)}
+                      type={field.type}
+                      minFields={field.minFields || 1}
+                      maxFields={field.maxFields || 10}
+                      required={field.required}
                     />
                   ) : (
-                    <input
-                      type="text"
-                      className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
-                      value={data[challenge.id]?.[field.id] || ''}
-                      onChange={e => handleChange(challenge.id, field.id, e.target.value)}
-                      placeholder="Write your answer here..."
-                    />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">{t('common.required')}</span>}
+                      </label>
+                      {field.type === 'textarea' ? (
+                        <textarea
+                          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
+                          rows={3}
+                          value={(data[challenge.id]?.[field.id] as string) || ''}
+                          onChange={e => handleChange(challenge.id, field.id, e.target.value)}
+                          placeholder={t('common.placeholder')}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
+                          value={(data[challenge.id]?.[field.id] as string) || ''}
+                          onChange={e => handleChange(challenge.id, field.id, e.target.value)}
+                          placeholder={t('common.placeholder')}
+                        />
+                      )}
+                    </div>
                   )}
                 </div>
               ))}
@@ -175,17 +276,16 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
           </div>
         ))}
 
-        <div className="flex items-center justify-between bg-white rounded-lg shadow-md p-4 sticky bottom-4">
-          <span className={`text-sm ${saved ? 'text-green-600' : 'text-gray-500'}`}>
-            {saved ? '✓ Saved!' : 'Unsaved changes'}
+        <div className="flex items-center justify-between gap-3 bg-white rounded-lg shadow-md px-4 py-2 sticky bottom-4">
+          <span className={`text-xs ${saved ? 'text-green-600' : 'text-gray-500'}`}>
+            {saved ? t('common.saved') : t('common.unsavedChanges')}
           </span>
-          <button
-            onClick={onSave}
-            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-6 rounded-md transition"
-          >
-            Save Progress
-          </button>
+          <Button onClick={onSave} className="py-1.5 px-4 text-sm">
+            {t('common.saveProgress')}
+          </Button>
         </div>
+
+        <ScrollToTop />
       </div>
     </div>
   );
@@ -196,43 +296,70 @@ interface SubmissionsPageProps {
 }
 
 function SubmissionsPage({ submissions }: SubmissionsPageProps) {
+  const { t } = useTranslation();
+  const challenges = getChallenges(t);
+
   if (!submissions || submissions.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Saved Submissions</h1>
-          <p className="text-gray-600">No submissions yet. Complete the challenges and save your progress!</p>
+      <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+        <div className="max-w-3xl w-full text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('submissions.title')}</h1>
+          <p className="text-gray-600">{t('submissions.noSubmissions')}</p>
         </div>
       </div>
     );
   }
 
+  const hasContent = (value: string | string[]): boolean => {
+    if (Array.isArray(value)) {
+      return value.some(v => v && v.trim());
+    }
+    return Boolean(value && value.trim().length > 0);
+  };
+
+  const renderValue = (value: string | string[]): React.ReactElement => {
+    if (Array.isArray(value)) {
+      const filtered = value.filter(v => v && v.trim());
+      if (filtered.length === 0) return <></>;
+      return (
+        <>
+          {filtered.map((v, i) => (
+            <p key={i} className="text-sm text-gray-800">
+              {filtered.length > 1 ? `${i + 1}. ` : ''}{v}
+            </p>
+          ))}
+        </>
+      );
+    }
+    return <p className="text-sm text-gray-800">{value}</p>;
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">Saved Submissions</h1>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+      <div className="max-w-3xl w-full">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">{t('submissions.title')}</h1>
         {submissions.map((submission, idx) => (
           <div key={idx} className="bg-white rounded-lg shadow-md p-6 mb-4">
             <div className="flex justify-between items-center mb-4 pb-2 border-b">
-              <span className="font-semibold text-gray-900">Submission #{idx + 1}</span>
+              <span className="font-semibold text-gray-900">{t('submissions.submission')} #{idx + 1}</span>
               <span className="text-sm text-gray-500">{submission.savedAt}</span>
             </div>
             {challenges.map(challenge => {
               const challengeData = submission.data[challenge.id];
               if (!challengeData) return null;
-              const hasContent = Object.values(challengeData).some(v => v && v.trim());
-              if (!hasContent) return null;
+              const hasChallengeContent = Object.values(challengeData).some(v => hasContent(v));
+              if (!hasChallengeContent) return null;
               return (
                 <div key={challenge.id} className="mb-4">
                   <h4 className="font-medium text-amber-600 text-sm mb-2">{challenge.title}</h4>
                   <div className="pl-3 border-l-2 border-gray-200">
                     {challenge.fields.map(field => {
                       const val = challengeData[field.id];
-                      if (!val || !val.trim()) return null;
+                      if (!hasContent(val)) return null;
                       return (
                         <div key={field.id} className="mb-2">
                           <span className="text-xs text-gray-500">{field.label}:</span>
-                          <p className="text-sm text-gray-800">{val}</p>
+                          {renderValue(val)}
                         </div>
                       );
                     })}
@@ -242,6 +369,8 @@ function SubmissionsPage({ submissions }: SubmissionsPageProps) {
             })}
           </div>
         ))}
+
+        <ScrollToTop />
       </div>
     </div>
   );
@@ -260,6 +389,7 @@ function getInitialData(): StoredData {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   const [page, setPage] = useState<'challenges' | 'submissions'>('challenges');
   const initialData = getInitialData();
   const [data, setData] = useState<FormData>(initialData.currentData);
@@ -271,9 +401,9 @@ export default function App() {
       data: { ...data },
       savedAt: new Date().toLocaleString()
     };
-    const updated: StoredData = { 
-      submissions: [...submissions, newSubmission], 
-      currentData: data 
+    const updated: StoredData = {
+      submissions: [...submissions, newSubmission],
+      currentData: data
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     setSubmissions(updated.submissions);
@@ -284,18 +414,19 @@ export default function App() {
   return (
     <div>
       <nav className="bg-gray-900 text-white px-4 py-3 flex justify-center gap-4 sticky top-0 z-10">
-        <button
+        <NavButton
           onClick={() => setPage('challenges')}
-          className={`px-4 py-1 rounded ${page === 'challenges' ? 'bg-amber-500' : 'hover:bg-gray-700'}`}
+          active={page === 'challenges'}
         >
-          Challenges
-        </button>
-        <button
+          {t('nav.challenges')}
+        </NavButton>
+        <NavButton
           onClick={() => setPage('submissions')}
-          className={`px-4 py-1 rounded ${page === 'submissions' ? 'bg-amber-500' : 'hover:bg-gray-700'}`}
+          active={page === 'submissions'}
+          disabled={submissions.length === 0}
         >
-          Submissions ({submissions.length})
-        </button>
+          {t('nav.submissions')} ({submissions.length})
+        </NavButton>
       </nav>
       {page === 'challenges' ? (
         <ChallengesPage data={data} setData={setData} onSave={handleSave} saved={saved} />
