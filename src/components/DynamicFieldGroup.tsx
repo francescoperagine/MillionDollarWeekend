@@ -58,29 +58,34 @@ export default function DynamicFieldGroup({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-          {required && <span className="text-red-500 ml-1">{t('common.required')}</span>}
-        </label>
-        {canAddMore && <AddButton onClick={handleAddField} />}
-      </div>
+      <label className="block text-sm font-medium text-gray-700">
+        {label}
+        {required && <span className="text-red-500 ml-1">{t('common.required')}</span>}
+      </label>
 
-      <div className="space-y-2">
-        {values.map((value, index) => (
-          <div key={index} className="relative">
-            <Input
-              value={value}
-              onChange={(newValue) => handleChangeField(index, newValue)}
-              type={type}
-              label={values.length > 1 ? `${index + 1}.` : undefined}
-              placeholder={`${placeholderText} ${values.length > 1 ? `#${index + 1}` : ''}`}
-              required={required && index === 0}
-              showValidation={required}
-              onRemove={canRemove && values.length > 1 ? () => handleRemoveField(index) : undefined}
-            />
+      <div className="relative">
+        <div className="space-y-2">
+          {values.map((value, index) => (
+            <div key={index} className="relative">
+              <Input
+                value={value}
+                onChange={(newValue) => handleChangeField(index, newValue)}
+                type={type}
+                label={values.length > 1 ? `${index + 1}.` : undefined}
+                placeholder={`${placeholderText} ${values.length > 1 ? `#${index + 1}` : ''}`}
+                required={required && index === 0}
+                showValidation={required}
+                onRemove={canRemove && values.length > 1 ? () => handleRemoveField(index) : undefined}
+              />
+            </div>
+          ))}
+        </div>
+
+        {canAddMore && (
+          <div className="flex justify-center mt-6">
+            <AddButton onClick={handleAddField} />
           </div>
-        ))}
+        )}
       </div>
 
       {values.length > 1 && (

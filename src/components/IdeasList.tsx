@@ -43,43 +43,48 @@ export default function IdeasList({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <label className="block text-sm font-medium text-gray-700">
-          {label}
-          {required && <span className="text-red-500 ml-1">{t('common.required')}</span>}
-        </label>
-        {canAddMore && <AddButton onClick={handleAddField} />}
-      </div>
+      <label className="block text-sm font-medium text-gray-700">
+        {label}
+        {required && <span className="text-red-500 ml-1">{t('common.required')}</span>}
+      </label>
 
-      <div className="space-y-2">
-        {/* Display collected ideas as read-only */}
-        {collectedIdeas.map((idea, index) => (
-          <div key={`collected-${index}`} className="relative">
-            <input
-              type="text"
-              className="w-full border border-gray-300 rounded-md p-2 text-sm text-black bg-gray-50 cursor-not-allowed"
-              value={idea}
-              readOnly
-              disabled
-              title="This idea is collected from previous challenges"
-            />
-          </div>
-        ))}
+      <div className="relative">
+        <div className="space-y-2">
+          {/* Display collected ideas as read-only */}
+          {collectedIdeas.map((idea, index) => (
+            <div key={`collected-${index}`} className="relative">
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded-md p-2 text-sm text-black bg-gray-50 cursor-not-allowed"
+                value={idea}
+                readOnly
+                disabled
+                title="This idea is collected from previous challenges"
+              />
+            </div>
+          ))}
 
-        {/* Display custom ideas as editable */}
-        {customIdeas.map((idea, index) => (
-          <div key={`custom-${index}`} className="relative">
-            <Input
-              value={idea}
-              onChange={(newValue) => handleChangeCustom(index, newValue)}
-              type="text"
-              placeholder={t('common.placeholder')}
-              required={required && collectedIdeas.length === 0 && index === 0}
-              showValidation={required}
-              onRemove={() => handleRemoveCustom(index)}
-            />
+          {/* Display custom ideas as editable */}
+          {customIdeas.map((idea, index) => (
+            <div key={`custom-${index}`} className="relative">
+              <Input
+                value={idea}
+                onChange={(newValue) => handleChangeCustom(index, newValue)}
+                type="text"
+                placeholder={t('common.placeholder')}
+                required={required && collectedIdeas.length === 0 && index === 0}
+                showValidation={required}
+                onRemove={() => handleRemoveCustom(index)}
+              />
+            </div>
+          ))}
+        </div>
+
+        {canAddMore && (
+          <div className="flex justify-center mt-6">
+            <AddButton onClick={handleAddField} />
           </div>
-        ))}
+        )}
       </div>
 
       {totalIdeas > 1 && (

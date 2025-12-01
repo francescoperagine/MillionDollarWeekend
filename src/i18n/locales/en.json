@@ -44,7 +44,9 @@
     "title": "Saved Submissions",
     "noSubmissions": "No submissions yet. Complete the challenges and save your progress!",
     "submission": "Submission",
-    "characters": "characters"
+    "characters": "characters",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this submission? This action cannot be undone."
   },
   "validation": {
     "required": "This field is required",
@@ -67,7 +69,6 @@
       "title": "Foundation: Get Your First Dollar",
       "phase": "foundation",
       "description": "Here's the thing—most people never start because they're waiting for the perfect moment. This challenge breaks that pattern. You're going to ask someone you know to invest just one dollar in your future venture. Yep, seriously. Just a buck. Ask now.",
-      "instruction": "Pick someone who believes in you—a friend, family member, or colleague. Tell them you're starting a business and you'd love their support. In exchange for their dollar, promise to keep them updated on your journey. This isn't about the money. It's about taking that first uncomfortable step and getting someone else invested (literally) in your success.\n\nTry something like: \"Hey, I'm starting a business and I'd love your support. Would you invest $1 in me? I'll keep you posted on everything I'm building—you'll basically have a front-row seat. What do you say?\"",
       "fields": {
         "who_asked": "Who did you ask?",
         "response": "What happened? How did it go?"
@@ -77,7 +78,6 @@
       "title": "Foundation: Act Now, Figure It Out Later",
       "phase": "foundation",
       "description": "Stop overthinking. The best way to find a business idea isn't by sitting alone brainstorming—it's by asking people who actually know you. Someone in your life has probably already thought about what you'd be great at.",
-      "instruction": "Reach out to one person you respect and trust. Ask them what kind of business they think would suit you. Don't explain or justify—just ask and listen. You might be surprised by what they say.\n\nHere's a simple way to ask: \"I'm exploring some business ideas and I value your opinion. Based on what you know about me, what kind of business do you think I'd be really good at?\"",
       "fields": {
         "person_asked": "Who did you ask?",
         "ideas_suggested": "What business ideas did they mention?"
@@ -87,7 +87,6 @@
       "title": "Foundation: Calculate Your Freedom Number",
       "phase": "foundation",
       "description": "Forget about becoming a billionaire for a second. What do you actually need each month to live comfortably and feel free? That's your Freedom Number. It's not a fantasy—it's a concrete monthly goal that makes your business real and attainable.",
-      "instruction": "Add up your monthly expenses: rent or mortgage, groceries, transportation, insurance, fun money, savings—everything. Be honest with yourself. This number is your target. Once your business hits this monthly revenue, you've got financial breathing room.",
       "fields": {
         "monthly_number": "My Freedom Number (monthly revenue target)",
         "breakdown": "What does this cover? (list your monthly expenses)"
@@ -97,7 +96,6 @@
       "title": "Mindset: The Awkward Ask",
       "phase": "mindset",
       "description": "This one's going to feel weird, and that's exactly the point. Go buy coffee somewhere and ask for a discount—10% off, specifically. You're not doing this to save a few cents. You're training yourself to get comfortable with asking for things, even when it feels awkward. Every entrepreneur needs this skill.",
-      "instruction": "Head to any coffee shop, place your order, and when it's time to pay, ask: \"Could I get 10% off today?\" Then—and this is key—shut up. Don't explain, don't laugh nervously, don't fill the silence. Just wait for their response. Notice how it feels. This is your practice run for much bigger asks down the road.",
       "fields": {
         "where": "Where did you try this?",
         "result": "What happened? How did you feel during and after?"
@@ -107,7 +105,6 @@
       "title": "Discovery: Who Can You Help?",
       "phase": "discovery",
       "description": "Here's a secret: the easiest businesses to start are the ones where you already have access to customers. Before you pick a business idea, think about the groups of people you're already connected to. New parents in your neighborhood? Fellow gamers? People in your industry? Yoga enthusiasts? You want to help people you can actually reach.",
-      "instruction": "List groups of people you have real access to—not random strangers online, but communities you're already part of or can easily tap into. Think about your hobbies, your job, your location, your network. Who are you genuinely excited about helping?",
       "fields": {
         "groups": "List your target groups"
       }
@@ -116,7 +113,6 @@
       "title": "Discovery: Mine Your Frustrations",
       "phase": "discovery",
       "description": "The best business ideas don't come from thin air—they come from problems you actually experience. What bugs you? What do you wish existed? Your annoyances are potential gold mines because if you're frustrated by something, chances are thousands of other people are too.",
-      "instruction": "Answer these four questions honestly. Don't filter yourself—just brain-dump whatever comes to mind:\n\n1. What annoyed you today? (even small stuff counts)\n2. What's been sitting on your to-do list forever because you keep avoiding it?\n3. What's something you're just... not good at, no matter how hard you try?\n4. What's something you recently wanted to buy but couldn't find anywhere?\n\nEach answer could be a business idea.",
       "fields": {
         "ideas": "Your business ideas (based on your frustrations)"
       }
@@ -125,7 +121,6 @@
       "title": "Discovery: Ride the Wave",
       "phase": "discovery",
       "description": "Why reinvent the wheel? Some products are already selling like crazy—phones, laptops, fitness equipment, gaming consoles. The smart move? Create something that complements these bestsellers. It's way easier to sell to people who've already opened their wallets than to create demand from scratch.",
-      "instruction": "Think about popular products that are flying off the shelves. Now, how could you create an accessory, add-on, or service for those customers? \n\nExamples: Custom laptop skins, online courses for specific software, organizing systems for popular planners, protective cases for trending gadgets.\n\nWhat ideas can you come up with?",
       "fields": {
         "accessories": "Your accessory or service ideas"
       }
@@ -134,7 +129,6 @@
       "title": "Discovery: Listen to the Buyers",
       "phase": "discovery",
       "description": "People are literally screaming what they want to buy if you know where to look. Online marketplaces are full of buyers actively searching for solutions and willing to pay. Your job? Find out what they're looking for and give it to them.",
-      "instruction": "Spend 20 minutes browsing marketplaces like Etsy, Facebook Marketplace, Craigslist, or eBay. Pay attention to:\n• What are people repeatedly asking for?\n• What items have tons of bids or watchers?\n• What's selling out fast?\n• What do people complain is hard to find?\n\nJot down at least one product or service idea based on what you discover.",
       "fields": {
         "marketplace_ideas": "Ideas inspired by marketplace research"
       }
@@ -143,7 +137,6 @@
       "title": "Discovery: Follow the Questions",
       "phase": "discovery",
       "description": "Billions of people search Google every single day, asking questions about their problems. Each search is someone saying, \"I need help with this.\" Your mission? Find questions people are asking and build a business around the answers.",
-      "instruction": "Start typing questions into Google and see what auto-completes. Try phrases like \"how to,\" \"best way to,\" or \"where can I.\" Also check out Reddit communities like r/SomebodyMakeThis where people literally beg for solutions.\n\nPay attention to whether the problem is a \"vitamin\" (nice to have) or a \"painkiller\" (desperately needed). Painkillers sell better.\n\nExamples: \"How do I stop my dog from barking at night?\" or \"Best way to learn Spanish fast?\"\n\nWhat business ideas pop up?",
       "fields": {
         "search_ideas": "Ideas from search queries or Reddit"
       }
@@ -152,7 +145,6 @@
       "title": "Discovery: Capture All Your Ideas",
       "phase": "discovery",
       "description": "By now your brain should be buzzing with possibilities. Write them all down—even the weird ones. No idea is perfect right out of the gate. Every successful business evolves over time, so don't get stuck trying to find the \"perfect\" concept. Just get everything on paper.",
-      "instruction": "List every business idea you've come up with from the previous exercises. Aim for at least ten. Once they're all written down, cross out the ones that make you feel \"meh.\" Keep the ones that make you think, \"Yeah, I could actually do this\" or \"I'd be pumped to work on this.\" If you can't decide, pick the ideas that seem easiest to start and that you (or others) would genuinely pay for.",
       "fields": {
         "all_ideas": "All your business ideas"
       }
@@ -161,7 +153,6 @@
       "title": "Discovery: Pick Your Top 3",
       "phase": "discovery",
       "description": "Time to narrow it down. You can't chase ten ideas at once, so pick the three that feel most exciting and doable. These are the ones you'll put through the business model test next.",
-      "instruction": "Look at your list and choose three ideas based on:\n• Which ones get you genuinely excited\n• Which seem easiest to start\n• Which would you (and other people) actually pay money for\n\nDon't overthink it. Trust your gut.",
       "fields": {
         "top_ideas": "Your top 3 business ideas"
       }
@@ -170,7 +161,6 @@
       "title": "Validation: Verify Your Market",
       "phase": "validation",
       "description": "Before you build anything, you need to know if there's actually money to be made. No point creating a product nobody wants. Time to dig into the numbers and see if your idea has legs.",
-      "instruction": "Pick your favorite business idea and do some quick research. Use Google Trends to check if interest is growing or dying. Use Facebook Ads Manager (you don't have to run ads—just use the audience tool) to see how many potential customers exist. Then do some basic math.",
       "fields": {
         "business_idea": "Your chosen business idea",
         "market_trend": "Is interest growing, staying flat, or declining? (check Google Trends)",
@@ -184,7 +174,6 @@
       "title": "Validation: Run the Numbers",
       "phase": "validation",
       "description": "Let's get real about money. How much will you charge? How much will it cost you to deliver? What's your profit per sale? And how many sales do you need to hit your goal? Time to sketch out a simple business model and see if this thing makes sense.",
-      "instruction": "Don't stress about being perfect here—rough estimates work fine. The point is to reality-check whether your idea can actually make you money. Use this formula: Revenue - Cost = Profit. Then figure out how many units you need to sell to hit your target.",
       "fields": {
         "product_price": "How much will you charge per unit or service?",
         "cost_per_unit": "What's your cost to make and deliver it? (materials, shipping, time, etc.)",
@@ -198,7 +187,6 @@
       "title": "Validation: Adjust If Needed",
       "phase": "validation",
       "description": "If the numbers don't add up, don't panic. Most businesses need tweaking before they work. Maybe you can charge more. Maybe you can cut costs. Maybe a subscription model makes more sense, or selling to businesses instead of individuals. Let's brainstorm how to make this viable.",
-      "instruction": "Take a hard look at your business model. If the math doesn't work, think about how you could adjust it. Could you raise prices? Lower costs? Target a different customer? Add recurring revenue? Get creative here.",
       "fields": {
         "needs_pivot": "Does your model need some adjustments?",
         "pivot_ideas": "How could you change things? (higher pricing, subscription model, different target customer, reduce costs, etc.)",
