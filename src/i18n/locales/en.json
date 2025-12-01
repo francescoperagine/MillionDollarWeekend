@@ -1,17 +1,26 @@
 {
   "nav": {
     "challenges": "Challenges",
-    "submissions": "Submissions"
+    "submissions": "Submissions",
+    "quickJump": "Quick Jump to Phase"
+  },
+  "phases": {
+    "foundation": "Foundation",
+    "mindset": "Mindset",
+    "discovery": "Discovery",
+    "validation": "Validation"
   },
   "header": {
-    "title": "Million Dollar Weekend",
-    "subtitle": "Interactive Workbook",
-    "description": "Complete the challenges from Chapters 1-4 to start your million-dollar business"
+    "title": "Start Your Business",
+    "subtitle": "Action-Focused Workbook",
+    "description": "Work through practical exercises to launch a profitable business idea fast"
   },
   "common": {
     "saveProgress": "Save Progress",
     "saved": "✓ Saved!",
     "unsavedChanges": "Unsaved changes",
+    "reset": "Reset",
+    "resetConfirm": "Are you sure you want to clear all form data? This action cannot be undone.",
     "required": "*",
     "placeholder": "Write your answer here...",
     "of": "of",
@@ -25,6 +34,12 @@
     "removeField": "Remove field",
     "removeThisField": "Remove this field"
   },
+  "topThree": {
+    "instruction": "You have more than 3 ideas. Remove ideas until you have your top 3.",
+    "hint": "Drag ideas to reorder them by priority. Click the X to remove ideas you're less excited about.",
+    "complete": "Great! You've selected your top 3 ideas.",
+    "noIdeas": "No ideas yet. Add some ideas in \"Discovery: Capture All Your Ideas\" above first."
+  },
   "submissions": {
     "title": "Saved Submissions",
     "noSubmissions": "No submissions yet. Complete the challenges and save your progress!",
@@ -37,133 +52,157 @@
     "maxLength": "Maximum length is {{max}} characters",
     "invalidCharacters": "Contains invalid characters"
   },
+  "footer": {
+    "attribution": "Inspired by ",
+    "bookTitle": "Million Dollar Weekend",
+    "author": "by Noah Kagan",
+    "description": "This workbook adapts key concepts from the book into interactive exercises. We're grateful for Noah's work in making entrepreneurship more accessible.",
+    "getBook": "Get the book",
+    "bookUrl": "https://milliondollarweekend.com",
+    "learnMore": "Learn more about Noah Kagan",
+    "authorUrl": "https://okdork.com"
+  },
   "challenges": {
     "dollar_challenge": {
-      "title": "Chapter 1: The Dollar Challenge",
-      "description": "This is YOUR spark. Ask someone for a dollar investment in you and your future business. Tell them in exchange, they'll get regular updates and a front-row seat to the process of building a business from scratch.",
-      "instruction": "Ask someone you know for a dollar investment. Use this script:\n\n\"Hey [first name], I'm reading this book Million Dollar Weekend and they told me I need to get $1 from someone. You're the first person I thought of, and it would mean a lot to have your support. Can you send me $1 right now?\"",
+      "title": "Foundation: Get Your First Dollar",
+      "phase": "foundation",
+      "description": "Here's the thing—most people never start because they're waiting for the perfect moment. This challenge breaks that pattern. You're going to ask someone you know to invest just one dollar in your future venture. Yep, seriously. Just a buck. Ask now.",
+      "instruction": "Pick someone who believes in you—a friend, family member, or colleague. Tell them you're starting a business and you'd love their support. In exchange for their dollar, promise to keep them updated on your journey. This isn't about the money. It's about taking that first uncomfortable step and getting someone else invested (literally) in your success.\n\nTry something like: \"Hey, I'm starting a business and I'd love your support. Would you invest $1 in me? I'll keep you posted on everything I'm building—you'll basically have a front-row seat. What do you say?\"",
       "fields": {
         "who_asked": "Who did you ask?",
-        "response": "What happened?"
+        "response": "What happened? How did it go?"
       }
     },
     "now_not_how": {
-      "title": "Chapter 1: NOW, Not How Challenge",
-      "description": "Act first, figure it out later. This is a quick way to get a business idea by asking someone who knows you well.",
-      "instruction": "Ask one person you respect for a business idea. Use this script:\n\n\"Hey [first name], I'm trying to come up with some business ideas right now. You know me well, so I was wondering what kind of business you think I'd be good at?\"",
+      "title": "Foundation: Act Now, Figure It Out Later",
+      "phase": "foundation",
+      "description": "Stop overthinking. The best way to find a business idea isn't by sitting alone brainstorming—it's by asking people who actually know you. Someone in your life has probably already thought about what you'd be great at.",
+      "instruction": "Reach out to one person you respect and trust. Ask them what kind of business they think would suit you. Don't explain or justify—just ask and listen. You might be surprised by what they say.\n\nHere's a simple way to ask: \"I'm exploring some business ideas and I value your opinion. Based on what you know about me, what kind of business do you think I'd be really good at?\"",
       "fields": {
         "person_asked": "Who did you ask?",
-        "ideas_suggested": "What ideas did they suggest?"
+        "ideas_suggested": "What business ideas did they mention?"
       }
     },
     "freedom_number": {
-      "title": "Chapter 1: Your Freedom Number",
-      "description": "Your Freedom Number is a monthly revenue goal that represents financial freedom for you. It should be attainable and concrete—not some distant dream.",
-      "instruction": "Calculate your monthly expenses: housing, food, travel, savings, etc. This is your Freedom Number—the amount you need each month to live the life you want.",
+      "title": "Foundation: Calculate Your Freedom Number",
+      "phase": "foundation",
+      "description": "Forget about becoming a billionaire for a second. What do you actually need each month to live comfortably and feel free? That's your Freedom Number. It's not a fantasy—it's a concrete monthly goal that makes your business real and attainable.",
+      "instruction": "Add up your monthly expenses: rent or mortgage, groceries, transportation, insurance, fun money, savings—everything. Be honest with yourself. This number is your target. Once your business hits this monthly revenue, you've got financial breathing room.",
       "fields": {
-        "monthly_number": "My Freedom Number (monthly)",
-        "breakdown": "Breakdown of expenses"
+        "monthly_number": "My Freedom Number (monthly revenue target)",
+        "breakdown": "What does this cover? (list your monthly expenses)"
       }
     },
     "coffee_challenge": {
-      "title": "Chapter 2: The Coffee Challenge",
-      "description": "Go to any coffee shop and ask for 10% off. The whole point is for you to feel uncomfortable and practice asking. This builds your Ask muscle.",
-      "instruction": "Make a purchase at a coffee shop and ask for 10% off. Don't say anything else after asking. The goal is to experience asking and potential rejection.",
+      "title": "Mindset: The Awkward Ask",
+      "phase": "mindset",
+      "description": "This one's going to feel weird, and that's exactly the point. Go buy coffee somewhere and ask for a discount—10% off, specifically. You're not doing this to save a few cents. You're training yourself to get comfortable with asking for things, even when it feels awkward. Every entrepreneur needs this skill.",
+      "instruction": "Head to any coffee shop, place your order, and when it's time to pay, ask: \"Could I get 10% off today?\" Then—and this is key—shut up. Don't explain, don't laugh nervously, don't fill the silence. Just wait for their response. Notice how it feels. This is your practice run for much bigger asks down the road.",
       "fields": {
-        "where": "Where did you do the challenge?",
-        "result": "What happened? How did you feel?"
+        "where": "Where did you try this?",
+        "result": "What happened? How did you feel during and after?"
       }
     },
     "target_groups": {
-      "title": "Chapter 3 - Challenge 1: Top Three Groups",
-      "description": "Before you even think about picking a business idea, make sure you have easy access to the people you want to help. Think about where you have easy access to a targeted group of people whom you really want to help—like new moms in Austin, cyclists, freelance writers, or taco obsessives.",
-      "instruction": "Who do you have easy access to that you'd be EXCITED to help? This can be your neighbors, colleagues, religious friends, golf buddies, cooking friends, etc.",
+      "title": "Discovery: Who Can You Help?",
+      "phase": "discovery",
+      "description": "Here's a secret: the easiest businesses to start are the ones where you already have access to customers. Before you pick a business idea, think about the groups of people you're already connected to. New parents in your neighborhood? Fellow gamers? People in your industry? Yoga enthusiasts? You want to help people you can actually reach.",
+      "instruction": "List groups of people you have real access to—not random strangers online, but communities you're already part of or can easily tap into. Think about your hobbies, your job, your location, your network. Who are you genuinely excited about helping?",
       "fields": {
-        "groups": "Target Groups"
+        "groups": "List your target groups"
       }
     },
     "solve_problems": {
-      "title": "Chapter 3 - Challenge 2: Solve Your Own Problems",
-      "description": "The best entrepreneurs are the most dissatisfied. Your frustrations—and the frustrations of others—are your business opportunities. Great ideas come from being a problem seeker.",
-      "instruction": "Use these four questions to find three ideas:\n\n1. What is one thing this morning that irritated me?\n2. What is one thing on my to-do list that's been there over a week?\n3. What is one thing that I regularly fail to do well?\n4. What is one thing I wanted to buy recently only to find out that no one made it?",
+      "title": "Discovery: Mine Your Frustrations",
+      "phase": "discovery",
+      "description": "The best business ideas don't come from thin air—they come from problems you actually experience. What bugs you? What do you wish existed? Your annoyances are potential gold mines because if you're frustrated by something, chances are thousands of other people are too.",
+      "instruction": "Answer these four questions honestly. Don't filter yourself—just brain-dump whatever comes to mind:\n\n1. What annoyed you today? (even small stuff counts)\n2. What's been sitting on your to-do list forever because you keep avoiding it?\n3. What's something you're just... not good at, no matter how hard you try?\n4. What's something you recently wanted to buy but couldn't find anywhere?\n\nEach answer could be a business idea.",
       "fields": {
-        "ideas": "Business Ideas"
+        "ideas": "Your business ideas (based on your frustrations)"
       }
     },
     "bestsellers": {
-      "title": "Chapter 3 - Challenge 3: Bestsellers",
-      "description": "What products are already selling a crap-ton? iPads, iPhones, etc. Basically, any product you'd find on Amazon's Bestseller list would work here. It's easier to sell to a large group of people who've already spent money on a product or service.",
-      "instruction": "How can you accessorize a popular product (for example, stickers for an iPhone) or sell a service to those people (teaching someone how to use an iPhone)?\n\nExamples: Customizing Nike shoes, Video game tutorial for an Xbox game, Teaching computer novices how to use a MacBook.\n\nWrite down accessorizing ideas:",
+      "title": "Discovery: Ride the Wave",
+      "phase": "discovery",
+      "description": "Why reinvent the wheel? Some products are already selling like crazy—phones, laptops, fitness equipment, gaming consoles. The smart move? Create something that complements these bestsellers. It's way easier to sell to people who've already opened their wallets than to create demand from scratch.",
+      "instruction": "Think about popular products that are flying off the shelves. Now, how could you create an accessory, add-on, or service for those customers? \n\nExamples: Custom laptop skins, online courses for specific software, organizing systems for popular planners, protective cases for trending gadgets.\n\nWhat ideas can you come up with?",
       "fields": {
-        "accessories": "Accessorizing Ideas"
+        "accessories": "Your accessory or service ideas"
       }
     },
     "marketplaces": {
-      "title": "Chapter 3 - Challenge 4: Marketplaces",
-      "description": "One of Noah's favorite ways to find ideas is by studying the marketplaces where people are TRYING to spend money. Your potential customers are everywhere already asking in public for solutions—on message boards, in Facebook posts, in tweets, in church groups.",
-      "instruction": "Visit a marketplace like Etsy, Facebook Marketplace, Craigslist, or eBay. Look for frequent requests from people actively searching for someone to give their money to. Check completed listings on eBay to see how well certain products are selling.\n\nWrite at least one idea for a product or service:",
+      "title": "Discovery: Listen to the Buyers",
+      "phase": "discovery",
+      "description": "People are literally screaming what they want to buy if you know where to look. Online marketplaces are full of buyers actively searching for solutions and willing to pay. Your job? Find out what they're looking for and give it to them.",
+      "instruction": "Spend 20 minutes browsing marketplaces like Etsy, Facebook Marketplace, Craigslist, or eBay. Pay attention to:\n• What are people repeatedly asking for?\n• What items have tons of bids or watchers?\n• What's selling out fast?\n• What do people complain is hard to find?\n\nJot down at least one product or service idea based on what you discover.",
       "fields": {
-        "marketplace_ideas": "Marketplace Ideas"
+        "marketplace_ideas": "Ideas inspired by marketplace research"
       }
     },
     "search_queries": {
-      "title": "Chapter 3 - Challenge 5: Search Queries",
-      "description": "It's much easier to sell something when people ALREADY want it. There are 3 billion Google searches every day, giving you a direct line to customers' thoughts and needs. Work backwards from a problem people want solved (a query) toward a solution they may be willing to pay for.",
-      "instruction": "Try searching for questions like:\n• \"How do I train my cat to use a toilet?\"\n• \"Best places to travel with a family?\"\n• \"Where can I rent a bike in Barcelona?\"\n\nUse tools like AnswerThePublic.com or go to Reddit's r/SomebodyMakeThis subreddit where people are ACTIVELY offering up ideas.\n\nAsk yourself: Is the potential solution a vitamin (nice-to-have) or a painkiller (must-have)?\n\nWrite ideas:",
+      "title": "Discovery: Follow the Questions",
+      "phase": "discovery",
+      "description": "Billions of people search Google every single day, asking questions about their problems. Each search is someone saying, \"I need help with this.\" Your mission? Find questions people are asking and build a business around the answers.",
+      "instruction": "Start typing questions into Google and see what auto-completes. Try phrases like \"how to,\" \"best way to,\" or \"where can I.\" Also check out Reddit communities like r/SomebodyMakeThis where people literally beg for solutions.\n\nPay attention to whether the problem is a \"vitamin\" (nice to have) or a \"painkiller\" (desperately needed). Painkillers sell better.\n\nExamples: \"How do I stop my dog from barking at night?\" or \"Best way to learn Spanish fast?\"\n\nWhat business ideas pop up?",
       "fields": {
-        "search_ideas": "Search/Reddit Ideas"
+        "search_ideas": "Ideas from search queries or Reddit"
       }
     },
     "ten_ideas": {
-      "title": "Chapter 3 - Your Ideas List",
-      "description": "You should now have a list of ten ideas (or more!) from the four challenges above. Write them all down here. There's never a \"perfect\" idea—your idea will evolve over time, just as all businesses do.",
-      "instruction": "Write your ten ideas. Then eliminate the ones you're not excited about. If the top three are screaming \"Me! Me! Me!\" your work is done. If you can't decide, choose the ones you believe will be easiest to implement—and that you (and ideally other customers) would be thrilled to spend money on.",
+      "title": "Discovery: Capture All Your Ideas",
+      "phase": "discovery",
+      "description": "By now your brain should be buzzing with possibilities. Write them all down—even the weird ones. No idea is perfect right out of the gate. Every successful business evolves over time, so don't get stuck trying to find the \"perfect\" concept. Just get everything on paper.",
+      "instruction": "List every business idea you've come up with from the previous exercises. Aim for at least ten. Once they're all written down, cross out the ones that make you feel \"meh.\" Keep the ones that make you think, \"Yeah, I could actually do this\" or \"I'd be pumped to work on this.\" If you can't decide, pick the ideas that seem easiest to start and that you (or others) would genuinely pay for.",
       "fields": {
-        "all_ideas": "Your Ideas"
+        "all_ideas": "All your business ideas"
       }
     },
     "top_three": {
-      "title": "Chapter 3 - Pick Your Top 3 Ideas",
-      "description": "Now pick the three best ideas from your list above. These are the ideas you'll evaluate in Chapter 4 with the One-Minute Business Model.",
-      "instruction": "Choose the ideas that:\n• You're most excited about\n• Will be easiest to implement\n• You (and customers) would pay for",
+      "title": "Discovery: Pick Your Top 3",
+      "phase": "discovery",
+      "description": "Time to narrow it down. You can't chase ten ideas at once, so pick the three that feel most exciting and doable. These are the ones you'll put through the business model test next.",
+      "instruction": "Look at your list and choose three ideas based on:\n• Which ones get you genuinely excited\n• Which seem easiest to start\n• Which would you (and other people) actually pay money for\n\nDon't overthink it. Trust your gut.",
       "fields": {
-        "top_ideas": "Top Ideas"
+        "top_ideas": "Your top 3 business ideas"
       }
     },
     "market_research": {
-      "title": "Chapter 4 - Step 1: Find $1 Million Worth of Customers",
-      "description": "Before building anything, verify you have a million-dollar opportunity. Research the market to ensure there's demand.",
-      "instruction": "For your top business idea, research the market using Google Trends and Facebook Ads. Answer these key questions:",
+      "title": "Validation: Verify Your Market",
+      "phase": "validation",
+      "description": "Before you build anything, you need to know if there's actually money to be made. No point creating a product nobody wants. Time to dig into the numbers and see if your idea has legs.",
+      "instruction": "Pick your favorite business idea and do some quick research. Use Google Trends to check if interest is growing or dying. Use Facebook Ads Manager (you don't have to run ads—just use the audience tool) to see how many potential customers exist. Then do some basic math.",
       "fields": {
-        "business_idea": "Business Idea",
-        "market_trend": "Is the market dying, flat, or growing? (Use Google Trends)",
-        "market_size": "How many potential customers? (Use Facebook Ads)",
-        "price_point": "Price of your product/service",
-        "total_value": "Total market value (customers × price)",
-        "million_dollar": "Is this a million-dollar opportunity? (Yes/No)"
+        "business_idea": "Your chosen business idea",
+        "market_trend": "Is interest growing, staying flat, or declining? (check Google Trends)",
+        "market_size": "How many potential customers are out there? (estimate using Facebook Ads audience size)",
+        "price_point": "How much would you charge?",
+        "total_value": "Total potential revenue (customers × price)",
+        "million_dollar": "Based on this, could you realistically make $1 million? (Yes/No)"
       }
     },
     "business_model": {
-      "title": "Chapter 4 - Step 2: The One-Minute Business Model",
-      "description": "Figure out your revenue, costs, and profit to see what it takes to make $1 million. Revenue – Cost = Profit.",
-      "instruction": "Calculate your business model. Keep it simple—rough estimates are fine. The goal is to see if this can realistically make $1 million.",
+      "title": "Validation: Run the Numbers",
+      "phase": "validation",
+      "description": "Let's get real about money. How much will you charge? How much will it cost you to deliver? What's your profit per sale? And how many sales do you need to hit your goal? Time to sketch out a simple business model and see if this thing makes sense.",
+      "instruction": "Don't stress about being perfect here—rough estimates work fine. The point is to reality-check whether your idea can actually make you money. Use this formula: Revenue - Cost = Profit. Then figure out how many units you need to sell to hit your target.",
       "fields": {
-        "product_price": "Price per unit/service",
-        "cost_per_unit": "Cost to make, package, and ship (per unit)",
-        "profit_per_unit": "Profit per unit (Price - Cost)",
-        "target_profit": "Target profit goal",
-        "units_needed": "Total units needed to sell (Target ÷ Profit per unit)",
-        "is_doable": "Is this doable? Can you realistically sell this many?"
+        "product_price": "How much will you charge per unit or service?",
+        "cost_per_unit": "What's your cost to make and deliver it? (materials, shipping, time, etc.)",
+        "profit_per_unit": "Profit per sale (Price - Cost)",
+        "target_profit": "What's your revenue goal?",
+        "units_needed": "How many do you need to sell? (Target ÷ Profit per unit)",
+        "is_doable": "Be honest—can you actually sell this many?"
       }
     },
     "pivot_plan": {
-      "title": "Chapter 4 - Step 3: Pivot if Needed",
-      "description": "If the numbers don't work, adjust your model. Can you charge more? Reduce costs? Offer subscriptions? Sell to businesses instead of individuals?",
-      "instruction": "If your business model needs adjustment, brainstorm ways to improve it:",
+      "title": "Validation: Adjust If Needed",
+      "phase": "validation",
+      "description": "If the numbers don't add up, don't panic. Most businesses need tweaking before they work. Maybe you can charge more. Maybe you can cut costs. Maybe a subscription model makes more sense, or selling to businesses instead of individuals. Let's brainstorm how to make this viable.",
+      "instruction": "Take a hard look at your business model. If the math doesn't work, think about how you could adjust it. Could you raise prices? Lower costs? Target a different customer? Add recurring revenue? Get creative here.",
       "fields": {
-        "needs_pivot": "Does your model need adjustment?",
-        "pivot_ideas": "How could you pivot? (subscriptions, higher price, different customer, etc.)",
-        "revised_model": "Your revised business model"
+        "needs_pivot": "Does your model need some adjustments?",
+        "pivot_ideas": "How could you change things? (higher pricing, subscription model, different target customer, reduce costs, etc.)",
+        "revised_model": "What's your updated business model?"
       }
     }
   }

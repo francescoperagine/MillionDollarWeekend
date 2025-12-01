@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import DynamicFieldGroup from './components/DynamicFieldGroup';
-import Button from './components/Button';
-import NavButton from './components/NavButton';
+import IdeasList from './components/IdeasList';
+import TopThreeIdeas from './components/TopThreeIdeas';
 import ScrollToTop from './components/ScrollToTop';
+import Footer from './components/Footer';
+import ChallengeNavigation from './components/ChallengeNavigation';
 
 const STORAGE_KEY = 'mdw_workbook_challenges';
 
@@ -191,11 +193,9 @@ const getChallenges = (t: (key: string) => string): Challenge[] => [
 interface ChallengesPageProps {
   data: FormData;
   setData: React.Dispatch<React.SetStateAction<FormData>>;
-  onSave: () => void;
-  saved: boolean;
 }
 
-function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
+function ChallengesPage({ data, setData }: ChallengesPageProps) {
   const { t } = useTranslation();
   const challenges = getChallenges(t);
 
@@ -204,6 +204,66 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
       ...prev,
       [challengeId]: { ...prev[challengeId], [fieldId]: value }
     }));
+  };
+
+  const getCollectedIdeas = (): string[] => {
+    const collectedIdeas: string[] = [];
+
+    // From Challenge 2: Solve Your Own Problems (Business Ideas)
+    const businessIdeas = data['solve_problems']?.['ideas'];
+    if (Array.isArray(businessIdeas)) {
+      collectedIdeas.push(...businessIdeas.filter(v => v.trim()));
+    } else if (businessIdeas && typeof businessIdeas === 'string' && businessIdeas.trim()) {
+      collectedIdeas.push(businessIdeas);
+    }
+
+    // From Challenge 3: Bestsellers (Accessorizing Ideas)
+    const accessoryIdeas = data['bestsellers']?.['accessories'];
+    if (Array.isArray(accessoryIdeas)) {
+      collectedIdeas.push(...accessoryIdeas.filter(v => v.trim()));
+    } else if (accessoryIdeas && typeof accessoryIdeas === 'string' && accessoryIdeas.trim()) {
+      collectedIdeas.push(accessoryIdeas);
+    }
+
+    // From Challenge 4: Marketplaces (Marketplace Ideas)
+    const marketplaceIdeas = data['marketplaces']?.['marketplace_ideas'];
+    if (Array.isArray(marketplaceIdeas)) {
+      collectedIdeas.push(...marketplaceIdeas.filter(v => v.trim()));
+    } else if (marketplaceIdeas && typeof marketplaceIdeas === 'string' && marketplaceIdeas.trim()) {
+      collectedIdeas.push(marketplaceIdeas);
+    }
+
+    // From Challenge 5: Search Queries (Search/Reddit Ideas)
+    const searchIdeas = data['search_queries']?.['search_ideas'];
+    if (Array.isArray(searchIdeas)) {
+      collectedIdeas.push(...searchIdeas.filter(v => v.trim()));
+    } else if (searchIdeas && typeof searchIdeas === 'string' && searchIdeas.trim()) {
+      collectedIdeas.push(searchIdeas);
+    }
+
+    return collectedIdeas;
+  };
+
+  const getAllIdeas = (): string[] => {
+    // Combine collected ideas from previous challenges with custom ideas
+    const collectedIdeas = getCollectedIdeas();
+    const customIdeas = data['ten_ideas']?.['all_ideas'];
+
+    const allIdeas = [...collectedIdeas];
+
+    if (Array.isArray(customIdeas)) {
+      customIdeas.forEach(idea => {
+        if (idea.trim() && !allIdeas.includes(idea)) {
+          allIdeas.push(idea);
+        }
+      });
+    } else if (customIdeas && typeof customIdeas === 'string' && customIdeas.trim()) {
+      if (!allIdeas.includes(customIdeas)) {
+        allIdeas.push(customIdeas);
+      }
+    }
+
+    return allIdeas;
   };
 
   const getFieldValue = (challengeId: string, fieldId: string, isDynamic: boolean): string[] => {
@@ -217,25 +277,63 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 pb-24 flex justify-center">
       <div className="max-w-3xl w-full">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('header.title')}</h1>
-          <h2 className="text-xl text-amber-600 font-semibold">{t('header.subtitle')}</h2>
-          <p className="text-gray-600 mt-2">{t('header.description')}</p>
-        </div>
+        <ChallengeNavigation />
 
-        {challenges.map((challenge) => (
-          <div key={challenge.id} className="bg-white rounded-lg shadow-md p-6 mb-6 border-l-4 border-amber-500">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">{challenge.title}</h3>
-            <p className="text-gray-700 mb-3 text-sm">{challenge.description}</p>
+        <div className="mb-20">
+        {challenges.map((challenge, index) => {
+          // Check if this is the first challenge of a new phase
+          const currentPhase = t(`challenges.${challenge.id}.phase`);
+          const previousPhase = index > 0 ? t(`challenges.${challenges[index - 1].id}.phase`) : null;
+          const isNewPhase = currentPhase !== previousPhase;
+
+          // Strip phase prefix from title (e.g., "Foundation: Get Your First Dollar" -> "Get Your First Dollar")
+          const titleWithoutPhase = challenge.title.includes(':')
+            ? challenge.title.split(':')[1].trim()
+            : challenge.title;
+
+          return (
+            <div key={challenge.id}>
+              {isNewPhase && (
+                <div id={`phase-${currentPhase}`} className="flex items-center gap-4 mb-6 mt-8 first:mt-0 scroll-mt-24">
+                  <div className="flex-1 h-0.5 bg-amber-500"></div>
+                  <h2 className="text-2xl font-bold text-amber-600 uppercase tracking-wide">
+                    {t(`phases.${currentPhase}`)}
+                  </h2>
+                  <div className="flex-1 h-0.5 bg-amber-500"></div>
+                </div>
+              )}
+              <div
+                id={challenge.id}
+                className="bg-white rounded-lg shadow-md p-6 mb-6 border-l-4 border-amber-500 scroll-mt-24"
+              >
+                <h3 className="text-lg font-bold text-gray-900 mb-2">{titleWithoutPhase}</h3>
+                <p className="text-gray-700 mb-3 text-sm">{challenge.description}</p>
             <div className="bg-amber-50 p-4 rounded-md mb-4">
               <p className="text-gray-800 text-sm whitespace-pre-line">{challenge.instruction}</p>
             </div>
             <div className="space-y-3">
               {challenge.fields.map(field => (
                 <div key={field.id}>
-                  {field.dynamic ? (
+                  {challenge.id === 'ten_ideas' && field.id === 'all_ideas' ? (
+                    <IdeasList
+                      label={field.label}
+                      collectedIdeas={getCollectedIdeas()}
+                      customIdeas={(data[challenge.id]?.[field.id] as string[]) || []}
+                      onCustomIdeasChange={(values) => handleChange(challenge.id, field.id, values)}
+                      maxFields={field.maxFields || 20}
+                      required={field.required}
+                    />
+                  ) : challenge.id === 'top_three' && field.id === 'top_ideas' ? (
+                    <TopThreeIdeas
+                      label={field.label}
+                      allIdeas={getAllIdeas()}
+                      selectedIdeas={(data[challenge.id]?.[field.id] as string[]) || []}
+                      onSelectedIdeasChange={(values) => handleChange(challenge.id, field.id, values)}
+                      required={field.required}
+                    />
+                  ) : field.dynamic ? (
                     <DynamicFieldGroup
                       label={field.label}
                       values={getFieldValue(challenge.id, field.id, true)}
@@ -253,7 +351,7 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
                       </label>
                       {field.type === 'textarea' ? (
                         <textarea
-                          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
+                          className="w-full border border-gray-300 rounded-md p-2 text-sm text-black focus:ring-amber-500 focus:border-amber-500"
                           rows={3}
                           value={(data[challenge.id]?.[field.id] as string) || ''}
                           onChange={e => handleChange(challenge.id, field.id, e.target.value)}
@@ -262,7 +360,7 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
                       ) : (
                         <input
                           type="text"
-                          className="w-full border border-gray-300 rounded-md p-2 text-sm focus:ring-amber-500 focus:border-amber-500"
+                          className="w-full border border-gray-300 rounded-md p-2 text-sm text-black focus:ring-amber-500 focus:border-amber-500"
                           value={(data[challenge.id]?.[field.id] as string) || ''}
                           onChange={e => handleChange(challenge.id, field.id, e.target.value)}
                           placeholder={t('common.placeholder')}
@@ -274,15 +372,9 @@ function ChallengesPage({ data, setData, onSave, saved }: ChallengesPageProps) {
               ))}
             </div>
           </div>
-        ))}
-
-        <div className="flex items-center justify-between gap-3 bg-white rounded-lg shadow-md px-4 py-2 sticky bottom-4">
-          <span className={`text-xs ${saved ? 'text-green-600' : 'text-gray-500'}`}>
-            {saved ? t('common.saved') : t('common.unsavedChanges')}
-          </span>
-          <Button onClick={onSave} className="py-1.5 px-4 text-sm">
-            {t('common.saveProgress')}
-          </Button>
+        </div>
+          );
+        })}
         </div>
 
         <ScrollToTop />
@@ -301,7 +393,7 @@ function SubmissionsPage({ submissions }: SubmissionsPageProps) {
 
   if (!submissions || submissions.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+      <div className="min-h-screen bg-gray-50 py-8 px-4 pb-24 flex justify-center">
         <div className="max-w-3xl w-full text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('submissions.title')}</h1>
           <p className="text-gray-600">{t('submissions.noSubmissions')}</p>
@@ -335,7 +427,7 @@ function SubmissionsPage({ submissions }: SubmissionsPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 flex justify-center">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 pb-24 flex justify-center">
       <div className="max-w-3xl w-full">
         <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">{t('submissions.title')}</h1>
         {submissions.map((submission, idx) => (
@@ -395,6 +487,26 @@ export default function App() {
   const [data, setData] = useState<FormData>(initialData.currentData);
   const [submissions, setSubmissions] = useState<Submission[]>(initialData.submissions);
   const [saved, setSaved] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Check if there's any data in the form
+  const hasData = Object.keys(data).length > 0 && Object.values(data).some(challengeData =>
+    Object.values(challengeData).some(value => {
+      if (Array.isArray(value)) {
+        return value.some(v => v && v.trim().length > 0);
+      }
+      return value && typeof value === 'string' && value.trim().length > 0;
+    })
+  );
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSave = () => {
     const newSubmission: Submission = {
@@ -411,28 +523,53 @@ export default function App() {
     setTimeout(() => setSaved(false), 2000);
   };
 
+  const handleReset = () => {
+    if (window.confirm(t('common.resetConfirm'))) {
+      setData({});
+      setSaved(false);
+    }
+  };
+
   return (
     <div>
-      <nav className="bg-gray-900 text-white px-4 py-3 flex justify-center gap-4 sticky top-0 z-10">
-        <NavButton
-          onClick={() => setPage('challenges')}
-          active={page === 'challenges'}
-        >
-          {t('nav.challenges')}
-        </NavButton>
-        <NavButton
-          onClick={() => setPage('submissions')}
-          active={page === 'submissions'}
-          disabled={submissions.length === 0}
-        >
-          {t('nav.submissions')} ({submissions.length})
-        </NavButton>
-      </nav>
+      {/* Header Section */}
+      <header className="bg-gray-900 text-white sticky top-0 z-50 transition-all duration-300">
+        <div className={`text-center px-4 transition-all duration-300 ${isScrolled ? 'py-3' : 'py-6'}`}>
+          <h1 className={`font-bold text-amber-500 transition-all duration-300 ${isScrolled ? 'text-2xl sm:text-3xl mb-0' : 'text-3xl sm:text-4xl mb-2'}`}>
+            {t('header.title')}
+          </h1>
+          {/* Desktop: Show H2 when scrolled (smaller) */}
+          <div className={`hidden sm:block overflow-hidden transition-all duration-300 ${isScrolled ? 'max-h-10 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <h2 className="text-sm text-white font-semibold">
+              {t('header.subtitle')}
+            </h2>
+          </div>
+          {/* Initial state: Show H2 and P */}
+          <div className={`overflow-hidden transition-all duration-300 ${isScrolled ? 'max-h-0 opacity-0' : 'max-h-40 opacity-100'}`}>
+            <h2 className="text-lg sm:text-xl text-white font-semibold">
+              {t('header.subtitle')}
+            </h2>
+            <p className="text-gray-300 mt-2 text-sm sm:text-base">
+              {t('header.description')}
+            </p>
+          </div>
+        </div>
+      </header>
+
       {page === 'challenges' ? (
-        <ChallengesPage data={data} setData={setData} onSave={handleSave} saved={saved} />
+        <ChallengesPage data={data} setData={setData} />
       ) : (
         <SubmissionsPage submissions={submissions} />
       )}
+      <Footer
+        page={page}
+        setPage={setPage}
+        submissionsCount={submissions.length}
+        onSave={page === 'challenges' ? handleSave : undefined}
+        onReset={page === 'challenges' ? handleReset : undefined}
+        saved={saved}
+        hasData={hasData}
+      />
     </div>
   );
 }

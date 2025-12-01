@@ -13,7 +13,7 @@ export default function AddButton({ onClick, disabled = false }: AddButtonProps)
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="text-xs px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors flex items-center gap-1.5 border-2 border-amber-600 disabled:bg-gray-300 disabled:border-gray-400 disabled:cursor-not-allowed"
+      className="text-xs px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors flex items-center gap-1.5 shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed"
       aria-label={t('buttons.addNewField')}
       title={t('buttons.addNewField')}
     >
